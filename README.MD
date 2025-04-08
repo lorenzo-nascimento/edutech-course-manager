@@ -1,5 +1,10 @@
 # 🏫 Edutech - Plataforma de Gestão de Cursos
 
+[![Java](https://img.shields.io/badge/Java-17%2B-blue)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4.4-brightgreen
+)](https://spring.io/projects/spring-boot)
+[![H2](https://img.shields.io/badge/H2-Database-yellowgreen)](https://www.h2database.com/)
+
 Sistema de gerenciamentos de cursos online com relacionamentos ManyToMany (Alunos -- Cursos -- Categorias), desenvolvido com Spring Boot e H2.
 
 ## 📌 Funcionalidades
