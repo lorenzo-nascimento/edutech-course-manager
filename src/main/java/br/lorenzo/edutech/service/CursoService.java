@@ -24,8 +24,7 @@ public class CursoService {
     }
 
     @Transactional
-    public CursoDTO criarCurso(CursoDTO cursoDTO) {
-        // Valida pelo menos 1 categoria
+    public CursoDTO createCourse(CursoDTO cursoDTO) {
         if (cursoDTO.categoriasIds() == null || cursoDTO.categoriasIds().isEmpty()) {
             throw new IllegalArgumentException("Curso deve ter pelo menos uma categoria");
         }
@@ -34,7 +33,6 @@ public class CursoService {
         curso.setTitulo(cursoDTO.titulo());
         curso.setDescricao(cursoDTO.descricao());
 
-        // Busca e associa categorias
         List<Categoria> categorias = cursoDTO.categoriasIds().stream()
                 .map(id -> categoriaRepository.findById(id)
                         .orElseThrow(() -> new CategoriaNaoEncontradaException("Nenhuma categoria encontrada com os IDs fornecidos")))
@@ -50,4 +48,6 @@ public class CursoService {
                 cursoSalvo.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList())
         );
     }
+
+
 }

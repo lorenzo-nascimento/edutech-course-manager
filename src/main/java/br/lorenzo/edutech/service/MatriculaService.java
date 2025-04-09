@@ -13,6 +13,9 @@ import br.lorenzo.edutech.repository.MatriculaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class MatriculaService {
 
@@ -29,14 +32,13 @@ public class MatriculaService {
     }
 
     @Transactional
-    public MatriculaDTO matricularAluno(MatriculaDTO matriculaDTO) {
+    public MatriculaDTO enrollAluno(MatriculaDTO matriculaDTO) {
         Aluno aluno = alunoRepository.findById(matriculaDTO.alunoId())
                 .orElseThrow(() -> new AlunoNaoEncontradoException("Aluno não encontrado com ID: " + matriculaDTO.alunoId()));
 
         Curso curso = cursoRepository.findById(matriculaDTO.cursoId())
                 .orElseThrow(() -> new CursoNaoEncontradoException("Curso não encontrado com ID: " + matriculaDTO.cursoId()));
 
-        // Verifica se já existe matrícula
         if (matriculaRepository.existsByAlunoAndCurso(aluno, curso)) {
             throw new MatriculaDuplicadaException(
                     "O aluno ID " + aluno.getId() +
@@ -53,4 +55,17 @@ public class MatriculaService {
                 matricula.getDataInscricao()
         );
     }
+
+    public List<MatriculaDTO> findByAluno(Long alunoId) {
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new AlunoNaoEncontradoException("Aluno não encontrado"));
+
+        return matriculaRepository.findByAluno(aluno).stream()
+                .map(mat -> new MatriculaDTO(
+                        mat.getId().getAlunoId(),
+                        mat.getId().getCursoId(),
+                        mat.getDataInscricao()))
+                .collect(Collectors.toList());
+    }
+
 }

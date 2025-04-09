@@ -1,11 +1,15 @@
 package br.lorenzo.edutech.service;
 
 import br.lorenzo.edutech.dto.AlunoDTO;
+import br.lorenzo.edutech.exception.AlunoNaoEncontradoException;
 import br.lorenzo.edutech.exception.EmailDuplicadoException;
 import br.lorenzo.edutech.model.Aluno;
 import br.lorenzo.edutech.repository.AlunoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AlunoService {
@@ -17,7 +21,7 @@ public class AlunoService {
     }
 
     @Transactional
-    public AlunoDTO cadastrar(AlunoDTO alunoDTO) {
+    public AlunoDTO register(AlunoDTO alunoDTO) {
         // Valida e-mail único
         if (alunoRepository.existsByEmail(alunoDTO.email())) {
             throw new EmailDuplicadoException("O e-mail " + alunoDTO.email() + " já está cadastrado");
@@ -30,4 +34,19 @@ public class AlunoService {
         Aluno alunoSalvo = alunoRepository.save(aluno);
         return new AlunoDTO(alunoSalvo.getId(), alunoSalvo.getNome(), alunoSalvo.getEmail());
     }
+
+    public AlunoDTO findById(Long id) {
+        return alunoRepository.findById(id)
+                .map(aluno -> new AlunoDTO(aluno.getId(), aluno.getNome(), aluno.getEmail()))
+                .orElseThrow(() -> new AlunoNaoEncontradoException("Aluno não encontrado"));
+    }
+
+    public List<AlunoDTO> findAll() {
+        return alunoRepository.findAll().stream()
+                .map(aluno -> new AlunoDTO(aluno.getId(), aluno.getNome(), aluno.getEmail()))
+                .collect(Collectors.toList());
+    }
+
+
+
 }
