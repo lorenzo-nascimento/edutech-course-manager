@@ -3,7 +3,6 @@ package br.lorenzo.edutech.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;

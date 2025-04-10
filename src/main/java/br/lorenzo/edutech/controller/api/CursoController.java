@@ -28,8 +28,9 @@ public class CursoController {
     }
 
     @GetMapping("/por-categoria")
-    public ResponseEntity<List<CursoDTO>> listarPorCategoria(
+    public ResponseEntity<List<CursoDTO>> findByCategoria(
             @RequestParam String categoria) {
-        return ResponseEntity.ok(cursoService.listarPorCategoria(categoria));
+        return ResponseEntity.ok(cursoService.findByCategoria(categoria));
     }
+
 }

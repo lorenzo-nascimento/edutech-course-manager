@@ -49,5 +49,16 @@ public class CursoService {
         );
     }
 
+    public List<CursoDTO> findByCategoria(String nomeCategoria) {
+        return cursoRepository.findByCategoria(nomeCategoria).stream()
+                .map(curso -> new CursoDTO(
+                        curso.getId(),
+                        curso.getTitulo(),
+                        curso.getDescricao(),
+                        curso.getCategorias().stream()
+                                .map(Categoria::getId)
+                                .collect(Collectors.toList())))
+                .collect(Collectors.toList());
+    }
 
 }
