@@ -61,4 +61,17 @@ public class CursoService {
                 .collect(Collectors.toList());
     }
 
+    public List<CursoDTO> findAll() {
+        return cursoRepository.findAll().stream()
+                .map(curso -> new CursoDTO(
+                        curso.getId(),
+                        curso.getTitulo(),
+                        curso.getDescricao(),
+                        curso.getCategorias().stream()
+                                .map(Categoria::getId)
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

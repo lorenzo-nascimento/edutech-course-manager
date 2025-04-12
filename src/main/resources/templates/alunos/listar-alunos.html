@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Alunos - EduTech</title>
+  <link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
-$END$
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+  <h1>Lista de Alunos</h1>
+
+  <a th:href="@{/alunos/novo}" class="btn btn-primary mb-3">Novo Aluno</a>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Email</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="aluno : ${alunos}">
+      <td th:text="${aluno.id}"></td>
+      <td th:text="${aluno.nome}"></td>
+      <td th:text="${aluno.email}"></td>
+      <td>
+        <a th:href="@{/alunos/editar/{id}(id=${aluno.id})}" class="btn btn-sm btn-warning">Editar</a>
+        <a th:href="@{/alunos/excluir/{id}(id=${aluno.id})}" class="btn btn-sm btn-danger">Excluir</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

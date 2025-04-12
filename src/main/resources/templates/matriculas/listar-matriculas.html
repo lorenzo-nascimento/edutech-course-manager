@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Matriculas - EduTech</title>
+    <link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+    <h1>Lista de Matriculas</h1>
+
+    <a th:href="@{/matriculas/novo}" class="btn btn-primary mb-3">Nova Matricula</a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Aluno ID</th>
+            <th>Curso ID</th>
+            <th>Data Inscrição</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mat : ${matriculas}">
+            <td th:text="${mat.alunoId}"></td>
+            <td th:text="${mat.cursoId}"></td>
+            <td th:text="${mat.dataInscricao}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+<script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

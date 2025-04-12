@@ -68,4 +68,14 @@ public class MatriculaService {
                 .collect(Collectors.toList());
     }
 
+    public List<MatriculaDTO> findAll() {
+        return matriculaRepository.findAll().stream()
+                .map(mat -> new MatriculaDTO(
+                        mat.getId().getAlunoId(),
+                        mat.getId().getCursoId(),
+                        mat.getDataInscricao()
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

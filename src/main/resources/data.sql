@@ -17,7 +17,7 @@ INSERT INTO curso (titulo, descricao) VALUES
 ('React JS Fundamentos', 'Aprenda React do zero ao avançado'),
 ('Docker para Desenvolvedores', 'Containerização de aplicações');
 
--- Relacionamentos (agora com IDs explícitos)
+-- Relacionamentos
 INSERT INTO curso_categoria (curso_id, categoria_id) VALUES
 (1, 1), (1, 3),  -- Spring Boot
 (2, 1), (2, 2),  -- React
