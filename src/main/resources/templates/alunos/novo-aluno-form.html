@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+    <title>Novo Aluno - EduTech</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+    <h1>Cadastrar Novo Aluno</h1>
+
+    <form th:action="@{/web/alunos/novo}" method="post">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" required
+                   th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+            <div th:if="${#fields.hasErrors('nome')}" class="invalid-feedback">
+                <span th:errors="*{nome}"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required
+                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+            <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                <span th:errors="*{email}"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a th:href="@{/alunos}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

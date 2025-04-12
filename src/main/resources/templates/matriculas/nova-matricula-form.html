@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+    <title>Nova Matrícula - EduTech</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+    <h1>Nova Matrícula</h1>
+
+    <form th:action="@{/web/matriculas/nova}" method="post">
+        <div class="mb-3">
+            <label for="alunoId" class="form-label">Aluno</label>
+            <select class="form-select" id="alunoId" name="alunoId" required>
+                <option value="">Selecione um aluno</option>
+                <option th:each="aluno : ${todosAlunos}"
+                        th:value="${aluno.id}"
+                        th:text="${aluno.nome + ' (' + aluno.email + ')'}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="cursoId" class="form-label">Curso</label>
+            <select class="form-select" id="cursoId" name="cursoId" required>
+                <option value="">Selecione um curso</option>
+                <option th:each="curso : ${todosCursos}"
+                        th:value="${curso.id}"
+                        th:text="${curso.titulo}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Matricular</button>
+        <a th:href="@{/matriculas}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
