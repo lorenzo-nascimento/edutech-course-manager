@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,29 +25,32 @@ public class AlunoWebController {
 
     @GetMapping("/novo")
     public String mostrarFormulario(Model model) {
-        model.addAttribute("aluno", new AlunoDTO(null, "", ""));
+        if (!model.containsAttribute("aluno")) {
+            model.addAttribute("aluno", new AlunoDTO(null, "", ""));
+        }
         return "alunos/novo-aluno-form";
     }
 
-
-    public String cadastrarAluno(@Valid AlunoDTO alunoDTO,
+    @PostMapping("/novo")
+    public String cadastrarAluno(@Valid @ModelAttribute("aluno") AlunoDTO alunoDTO,
                                  BindingResult result,
                                  RedirectAttributes attributes) {
+
         if (result.hasErrors()) {
             return "alunos/novo-aluno-form";
         }
 
         try {
             alunoService.register(alunoDTO);
-            attributes.addFlashAttribute("sucess", "Aluno cadastrado com sucesso!!");
-            return "redirect:/alunos";
+            attributes.addFlashAttribute("success", "Aluno cadastrado com sucesso!");
+            return "redirect:/web/alunos";
         } catch (EmailDuplicadoException e) {
             result.rejectValue("email", "error.aluno", e.getMessage());
             return "alunos/novo-aluno-form";
         }
-
     }
 
+    @GetMapping
     public String listAlunos(Model model) {
         model.addAttribute("alunos", alunoService.findAll());
         return "alunos/listar-alunos";

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="~{fragments/header :: header}"></th:block>
+    <th:block th:replace="~{fragments/header :: header('Nova Matrícula - EduTech')}"></th:block>
     <title>Nova Matrícula - EduTech</title>
 </head>
 <body>
@@ -32,7 +32,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Matricular</button>
-        <a th:href="@{/matriculas}" class="btn btn-secondary">Cancelar</a>
+        <a th:href="@{/web/matriculas}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 

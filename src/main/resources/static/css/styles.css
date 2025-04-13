@@ -1,9 +1,23 @@
 body {
-    padding-top: 56px;
+    padding-bottom: 60px;
+    min-height: 100vh;
+    position: relative;
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+.container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.alert {
+    margin-top: 20px;
+}
+
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    display: block;
 }

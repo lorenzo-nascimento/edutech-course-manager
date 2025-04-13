@@ -45,6 +45,13 @@ public class MatriculaWebController {
         } catch (Exception e) {
             attributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/matriculas";
+        return "redirect:/web/matriculas";
     }
+
+    @GetMapping
+    public String listMatriculas(Model model) {
+        model.addAttribute("matriculas", matriculaService.findAll());
+        return "matriculas/listar-matriculas";
+    }
+
 }

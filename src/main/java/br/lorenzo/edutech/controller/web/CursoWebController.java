@@ -36,19 +36,22 @@ public class CursoWebController {
     @PostMapping("/novo")
     public String cadastrarCurso(@Valid CursoDTO cursoDTO,
                                  BindingResult result,
-                                 RedirectAttributes attributes) {
+                                 RedirectAttributes attributes,
+                                 Model model) {
         if (result.hasErrors()) {
             return "cursos/novo-curso-form";
         }
 
         cursoService.createCourse(cursoDTO);
         attributes.addFlashAttribute("success", "Curso cadastrado com sucesso!");
-        return "redirect:/cursos";
+        return "redirect:/web/cursos";
     }
 
+    @GetMapping
     public String listCursos(Model model) {
         model.addAttribute("cursos", cursoService.findAll());
         return "cursos/listar-cursos";
     }
+
 
 }

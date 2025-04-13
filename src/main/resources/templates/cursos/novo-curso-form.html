@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="~{fragments/header :: header}"></th:block>
+    <th:block th:replace="~{fragments/header :: header('Novo Curso - EduTech')}"></th:block>
     <title>Novo Curso - EduTech</title>
 </head>
 <body>
@@ -10,19 +10,19 @@
 <div class="container mt-4">
     <h1>Cadastrar Novo Curso</h1>
 
-    <form th:action="@{/web/cursos/novo}" method="post">
-        <div class="mb-3">
+    <form th:action="@{/web/cursos/novo}" th:object="${curso}" method="post">
+    <div class="mb-3">
             <label for="titulo" class="form-label">Título</label>
-            <input type="text" class="form-control" id="titulo" name="titulo" required
-                   th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid'">
-            <div th:if="${#fields.hasErrors('titulo')}" class="invalid-feedback">
+        <input type="text" class="form-control" th:field="*{titulo}" id="titulo" required
+               th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid'">
+        <div th:if="${#fields.hasErrors('titulo')}" class="invalid-feedback">
                 <span th:errors="*{titulo}"></span>
             </div>
         </div>
 
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="3" required
+            <textarea class="form-control" th:field="*{descricao}" id="descricao" rows="3" required
                       th:classappend="${#fields.hasErrors('descricao')} ? 'is-invalid'"></textarea>
             <div th:if="${#fields.hasErrors('descricao')}" class="invalid-feedback">
                 <span th:errors="*{descricao}"></span>
@@ -35,7 +35,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox"
                            th:id="${'cat-' + categoria.id}"
-                           th:value="${categoria.id}" name="categoriasIds">
+                           th:value="${categoria.id}" th:field="*{categoriasIds}">
                     <label class="form-check-label" th:for="${'cat-' + categoria.id}"
                            th:text="${categoria.nome}"></label>
                 </div>
