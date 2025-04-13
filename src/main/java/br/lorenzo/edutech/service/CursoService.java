@@ -46,7 +46,8 @@ public class CursoService {
                 cursoSalvo.getId(),
                 cursoSalvo.getTitulo(),
                 cursoSalvo.getDescricao(),
-                cursoSalvo.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList())
+                cursoSalvo.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList()),
+                cursoSalvo.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList())
         );
     }
 
@@ -58,9 +59,8 @@ public class CursoService {
                 curso.getId(),
                 curso.getTitulo(),
                 curso.getDescricao(),
-                curso.getCategorias().stream()
-                        .map(Categoria::getId)
-                        .collect(Collectors.toList())
+                curso.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList()),
+                curso.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList())
         );
     }
 
@@ -71,9 +71,9 @@ public class CursoService {
                         curso.getId(),
                         curso.getTitulo(),
                         curso.getDescricao(),
-                        curso.getCategorias().stream()
-                                .map(Categoria::getId)
-                                .collect(Collectors.toList())))
+                        curso.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList()),
+                        curso.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList())
+                        ))
                 .collect(Collectors.toList());
     }
 
@@ -83,9 +83,8 @@ public class CursoService {
                         curso.getId(),
                         curso.getTitulo(),
                         curso.getDescricao(),
-                        curso.getCategorias().stream()
-                                .map(Categoria::getId)
-                                .collect(Collectors.toList())
+                        curso.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList()),
+                        curso.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
     }
@@ -115,7 +114,8 @@ public class CursoService {
                 curso.getId(),
                 curso.getTitulo(),
                 curso.getDescricao(),
-                curso.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList())
+                curso.getCategorias().stream().map(Categoria::getId).collect(Collectors.toList()),
+                curso.getCategorias().stream().map(Categoria::getNome).collect(Collectors.toList())
         );
     }
 

@@ -30,8 +30,8 @@
             <td th:text="${curso.titulo}"></td>
             <td th:text="${curso.descricao}"></td>
             <td>
-                <span th:each="catId : ${curso.categoriasIds}"
-                      th:text="${catId} + ' '"></span>
+    <span th:each="nome, iterStat : ${curso.categoriasNomes}"
+          th:text="${nome + (not iterStat.last? ', ' : '')}"></span>
             </td>
             <td>
                 <a th:href="@{/web/cursos/editar/{id}(id=${curso.id})}"
