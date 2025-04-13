@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -28,23 +29,33 @@ public class CursoWebController {
 
     @GetMapping("/novo")
     public String mostrarFormulario(Model model) {
-        model.addAttribute("curso", new CursoDTO(null, "", "", new ArrayList<>()));
+        if (!model.containsAttribute("curso")) {
+            model.addAttribute("curso", new CursoDTO(null, "", "", new ArrayList<>()));
+        }
         model.addAttribute("todasCategorias", categoriaService.findAll());
         return "cursos/novo-curso-form";
     }
 
     @PostMapping("/novo")
-    public String cadastrarCurso(@Valid CursoDTO cursoDTO,
+    public String cadastrarCurso(@Valid @ModelAttribute("curso") CursoDTO cursoDTO,
                                  BindingResult result,
-                                 RedirectAttributes attributes,
-                                 Model model) {
+                                 RedirectAttributes attributes) {
+
         if (result.hasErrors()) {
-            return "cursos/novo-curso-form";
+            attributes.addFlashAttribute("org.springframework.validation.BindingResult.curso", result);
+            attributes.addFlashAttribute("curso", cursoDTO);
+            attributes.addFlashAttribute("todasCategorias", categoriaService.findAll());
+            return "redirect:/web/cursos/novo";
         }
 
-        cursoService.createCourse(cursoDTO);
-        attributes.addFlashAttribute("success", "Curso cadastrado com sucesso!");
-        return "redirect:/web/cursos";
+        try {
+            cursoService.createCourse(cursoDTO);
+            attributes.addFlashAttribute("success", "Curso cadastrado com sucesso!");
+            return "redirect:/web/cursos";
+        } catch (Exception e) {
+            attributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/web/cursos/novo";
+        }
     }
 
     @GetMapping
@@ -52,6 +63,5 @@ public class CursoWebController {
         model.addAttribute("cursos", cursoService.findAll());
         return "cursos/listar-cursos";
     }
-
 
 }

@@ -13,8 +13,8 @@
     <form th:action="@{/web/cursos/novo}" th:object="${curso}" method="post">
     <div class="mb-3">
             <label for="titulo" class="form-label">Título</label>
-        <input type="text" class="form-control" th:field="*{titulo}" id="titulo" required
-               th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid'">
+        <input type="text" th:field="*{titulo}"
+               th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid' : ''">
         <div th:if="${#fields.hasErrors('titulo')}" class="invalid-feedback">
                 <span th:errors="*{titulo}"></span>
             </div>

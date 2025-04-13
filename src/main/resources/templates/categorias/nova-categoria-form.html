@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/header :: header('Nova Categoria - EduTech')}"></th:block>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+    <h1>Nova Categoria</h1>
+
+    <form th:action="@{/web/categorias/nova}" method="post" th:object="${categoria}">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" th:field="*{nome}"
+                   th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid' : ''">
+            <div th:if="${#fields.hasErrors('nome')}" class="invalid-feedback">
+                <span th:errors="*{nome}"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a th:href="@{/web/categorias}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
