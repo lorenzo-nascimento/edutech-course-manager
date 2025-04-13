@@ -2,6 +2,7 @@ package br.lorenzo.edutech.service;
 
 import br.lorenzo.edutech.dto.CategoriaDTO;
 import br.lorenzo.edutech.exception.CategoriaDuplicadaException;
+import br.lorenzo.edutech.exception.CategoriaNaoEncontradaException;
 import br.lorenzo.edutech.model.Categoria;
 import br.lorenzo.edutech.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,51 @@ public class CategoriaService {
         return new CategoriaDTO(saved.getId(), saved.getNome());
     }
 
+    public CategoriaDTO findById(Long id) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new CategoriaNaoEncontradaException("Categoria não encontrada com o ID: " + id));
+
+        return new CategoriaDTO(categoria.getId(), categoria.getNome());
+    }
+
+
     public List<CategoriaDTO> findAll() {
         return categoriaRepository.findAll().stream()
                 .map(cat -> new CategoriaDTO(cat.getId(), cat.getNome()))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public CategoriaDTO update(Long id, CategoriaDTO categoriaDTO) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new CategoriaNaoEncontradaException("Categoria não encontrada"));
+
+        if (!categoria.getNome().equals(categoriaDTO.nome()) &&
+                categoriaRepository.existsByNome(categoriaDTO.nome())) {
+            throw new CategoriaDuplicadaException("Categoria " + categoriaDTO.nome() + " já existe");
+        }
+
+        categoria.setNome(categoriaDTO.nome());
+        categoriaRepository.save(categoria);
+
+        return new CategoriaDTO(categoria.getId(), categoria.getNome());
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new CategoriaNaoEncontradaException("Categoria não encontrada"));
+
+        if (!categoria.getCursos().isEmpty()) {
+            int quantidadeCursos = categoria.getCursos().size();
+            throw new IllegalStateException(
+                    "Esta categoria está vinculada a " + quantidadeCursos +
+                            " curso(s). Remova os vínculos antes de excluir."
+            );
+        }
+
+        categoriaRepository.delete(categoria);
+    }
+
+
 }

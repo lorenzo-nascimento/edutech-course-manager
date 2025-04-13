@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -23,6 +20,13 @@ public class AlunoWebController {
         this.alunoService = alunoService;
     }
 
+    @GetMapping
+    public String listAlunos(Model model) {
+        model.addAttribute("alunos", alunoService.findAll());
+        return "alunos/listar-alunos";
+    }
+
+
     @GetMapping("/novo")
     public String mostrarFormulario(Model model) {
         if (!model.containsAttribute("aluno")) {
@@ -30,6 +34,7 @@ public class AlunoWebController {
         }
         return "alunos/novo-aluno-form";
     }
+
 
     @PostMapping("/novo")
     public String cadastrarAluno(@Valid @ModelAttribute("aluno") AlunoDTO alunoDTO,
@@ -50,10 +55,42 @@ public class AlunoWebController {
         }
     }
 
-    @GetMapping
-    public String listAlunos(Model model) {
-        model.addAttribute("alunos", alunoService.findAll());
-        return "alunos/listar-alunos";
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEdicao(@PathVariable Long id, Model model) {
+        AlunoDTO alunoDTO = alunoService.findById(id);
+        model.addAttribute("aluno", alunoDTO);
+        return "alunos/editar-aluno-form";
+    }
+
+    @PostMapping("/editar/{id}")
+    public String atualizarAluno(@PathVariable Long id,
+                                 @Valid @ModelAttribute("aluno") AlunoDTO alunoDTO,
+                                 BindingResult result,
+                                 RedirectAttributes attributes) {
+
+        if (result.hasErrors()) {
+            return "alunos/editar-aluno-form";
+        }
+
+        try {
+            alunoService.update(id, alunoDTO);
+            attributes.addFlashAttribute("success", "Aluno atualizado com sucesso!");
+            return "redirect:/web/alunos";
+        } catch (EmailDuplicadoException e) {
+            result.rejectValue("email", "error.aluno", e.getMessage());
+            return "alunos/editar-aluno-form";
+        }
+    }
+
+    @GetMapping("/excluir/{id}")
+    public String excluirAluno(@PathVariable Long id, RedirectAttributes attributes) {
+        try {
+            alunoService.delete(id);
+            attributes.addFlashAttribute("success", "Aluno excluído com sucesso!");
+        } catch (Exception e) {
+            attributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/web/alunos";
     }
 
 

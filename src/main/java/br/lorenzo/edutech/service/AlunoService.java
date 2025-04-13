@@ -47,6 +47,29 @@ public class AlunoService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public AlunoDTO update(Long id, AlunoDTO alunoDTO) {
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new AlunoNaoEncontradoException("Aluno não encontrado"));
 
+        if (!aluno.getEmail().equals(alunoDTO.email()) &&
+                alunoRepository.existsByEmail(alunoDTO.email())) {
+            throw new EmailDuplicadoException("O e-mail " + alunoDTO.email() + " já está cadastrado");
+        }
+
+        aluno.setNome(alunoDTO.nome());
+        aluno.setEmail(alunoDTO.email());
+
+        alunoRepository.save(aluno);
+        return new AlunoDTO(aluno.getId(), aluno.getNome(), aluno.getEmail());
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        if (!alunoRepository.existsById(id)) {
+            throw new AlunoNaoEncontradoException("Aluno não encontrado");
+        }
+        alunoRepository.deleteById(id);
+    }
 
 }

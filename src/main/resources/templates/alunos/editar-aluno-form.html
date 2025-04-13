@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/header :: header('Editar Aluno - EduTech')}"></th:block>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+    <h1>Editar Aluno</h1>
+
+    <form th:action="@{/web/alunos/editar/{id}(id=${aluno.id})}"
+          method="post"
+          th:object="${aluno}">
+        <div class="mb-3">
+            <label for="nomeInput" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nomeInput"
+                   th:field="*{nome}"
+                   th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid' : ''">
+            <div th:if="${#fields.hasErrors('nome')}" class="invalid-feedback">
+                <span th:errors="*{nome}"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="emailInput" class="form-label">Email</label>
+            <input type="email" class="form-control" id="emailInput"
+                   th:field="*{email}"
+                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
+            <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                <span th:errors="*{email}"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Atualizar</button>
+        <a th:href="@{/web/alunos}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

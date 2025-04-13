@@ -30,8 +30,11 @@
       <td th:text="${aluno.nome}"></td>
       <td th:text="${aluno.email}"></td>
       <td>
-        <a th:href="@{/alunos/editar/{id}(id=${aluno.id})}" class="btn btn-sm btn-warning">Editar</a>
-        <a th:href="@{/alunos/excluir/{id}(id=${aluno.id})}" class="btn btn-sm btn-danger">Excluir</a>
+        <a th:href="@{/web/alunos/editar/{id}(id=${aluno.id})}"
+           class="btn btn-sm btn-warning">Editar</a>
+        <a th:href="@{/web/alunos/excluir/{id}(id=${aluno.id})}"
+           class="btn btn-sm btn-danger"
+           onclick="return confirm('Tem certeza que deseja excluir este aluno?')">Excluir</a>
       </td>
     </tr>
     </tbody>

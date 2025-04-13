@@ -9,7 +9,15 @@
 <div class="container mt-4">
     <h1>Lista de Categorias</h1>
 
-    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
     <a th:href="@{/web/categorias/nova}" class="btn btn-primary mb-3">Nova Categoria</a>
 
@@ -24,6 +32,13 @@
         <tr th:each="categoria : ${categorias}">
             <td th:text="${categoria.id}"></td>
             <td th:text="${categoria.nome}"></td>
+            <td>
+                <a th:href="@{/web/categorias/editar/{id}(id=${categoria.id})}"
+                   class="btn btn-sm btn-warning">Editar</a>
+                <a th:href="@{/web/categorias/excluir/{id}(id=${categoria.id})}"
+                   class="btn btn-sm btn-danger"
+                   onclick="return confirm('Tem certeza que deseja excluir esta categoria?')">Excluir</a>
+            </td>
         </tr>
         </tbody>
     </table>
