@@ -40,6 +40,10 @@ public class CursoWebController {
     public String cadastrarCurso(@Valid @ModelAttribute("curso") CursoDTO cursoDTO,
                                  BindingResult result,
                                  RedirectAttributes attributes) {
+        
+        if (cursoDTO.categoriasIds() == null || cursoDTO.categoriasIds().isEmpty()) {
+            result.rejectValue("categoriasIds", "error.curso", "Selecione pelo menos uma categoria");
+        }
 
         if (result.hasErrors()) {
             attributes.addFlashAttribute("org.springframework.validation.BindingResult.curso", result);
@@ -54,6 +58,8 @@ public class CursoWebController {
             return "redirect:/web/cursos";
         } catch (Exception e) {
             attributes.addFlashAttribute("error", e.getMessage());
+            attributes.addFlashAttribute("curso", cursoDTO);
+            attributes.addFlashAttribute("todasCategorias", categoriaService.findAll());
             return "redirect:/web/cursos/novo";
         }
     }

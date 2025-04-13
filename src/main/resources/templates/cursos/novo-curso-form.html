@@ -10,20 +10,22 @@
 <div class="container mt-4">
     <h1>Cadastrar Novo Curso</h1>
 
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
     <form th:action="@{/web/cursos/novo}" th:object="${curso}" method="post">
-    <div class="mb-3">
-            <label for="titulo" class="form-label">Título</label>
-        <input type="text" th:field="*{titulo}"
-               th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid' : ''">
-        <div th:if="${#fields.hasErrors('titulo')}" class="invalid-feedback">
+        <div class="mb-3">
+            <label for="tituloInput" class="form-label">Título</label>
+            <input type="text" class="form-control" id="tituloInput" th:field="*{titulo}"
+                   th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid' : ''">
+            <div th:if="${#fields.hasErrors('titulo')}" class="invalid-feedback">
                 <span th:errors="*{titulo}"></span>
             </div>
         </div>
 
         <div class="mb-3">
-            <label for="descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" th:field="*{descricao}" id="descricao" rows="3" required
-                      th:classappend="${#fields.hasErrors('descricao')} ? 'is-invalid'"></textarea>
+            <label for="descricaoInput" class="form-label">Descrição</label>
+            <textarea class="form-control" id="descricaoInput" th:field="*{descricao}" rows="3"
+                      th:classappend="${#fields.hasErrors('descricao')} ? 'is-invalid' : ''"></textarea>
             <div th:if="${#fields.hasErrors('descricao')}" class="invalid-feedback">
                 <span th:errors="*{descricao}"></span>
             </div>
@@ -31,6 +33,9 @@
 
         <div class="mb-3">
             <label class="form-label">Categorias</label>
+            <div th:if="${#fields.hasErrors('categoriasIds')}" class="invalid-feedback d-block">
+                <span th:errors="*{categoriasIds}"></span>
+            </div>
             <div th:each="categoria : ${todasCategorias}">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox"
@@ -43,7 +48,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar</button>
-        <a th:href="@{/cursos}" class="btn btn-secondary">Cancelar</a>
+        <a th:href="@{/web/cursos}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 
