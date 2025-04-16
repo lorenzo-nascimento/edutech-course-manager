@@ -21,6 +21,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setEmail("admin@edutech.com");
             admin.setSenha(passwordEncoder.encode("admin123"));
             admin.setNome("Administrador");
+            admin.setEnabled(true);
             admin.getPerfis().add("ADMIN");
 
             usuarioRepository.save(admin);

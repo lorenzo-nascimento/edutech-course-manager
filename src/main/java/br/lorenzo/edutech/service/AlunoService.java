@@ -22,7 +22,6 @@ public class AlunoService {
 
     @Transactional
     public AlunoDTO register(AlunoDTO alunoDTO) {
-        // Valida e-mail único
         if (alunoRepository.existsByEmail(alunoDTO.email())) {
             throw new EmailDuplicadoException("O e-mail " + alunoDTO.email() + " já está cadastrado");
         }

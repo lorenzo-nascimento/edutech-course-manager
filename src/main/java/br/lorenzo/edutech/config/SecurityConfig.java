@@ -4,14 +4,16 @@ import br.lorenzo.edutech.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -25,7 +27,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/webjars/**", "/css/**", "/login", "/registro").permitAll()
+                        .requestMatchers("/", "/webjars/**", "/css/**", "/login", "/registro",
+                                "/confirmar", "/recuperar-senha/**", "/resend-confirmation").permitAll()
                         .requestMatchers("/web/alunos/**", "/web/cursos/**", "/web/categorias/**").hasRole("ADMIN")
                         .requestMatchers("/web/matriculas/nova").hasAnyRole("ADMIN", "ALUNO")
                         .anyRequest().authenticated()
@@ -33,13 +36,44 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true)
+                        .failureHandler((request, response, exception) -> {
+                            String email = request.getParameter("username");
+                            if (exception instanceof DisabledException) {
+                                request.getSession().setAttribute("emailNaoConfirmado", email);
+                                response.sendRedirect("/login?error=nao_confirmado&email=" + email);
+                            } else if (exception instanceof BadCredentialsException) {
+                                try {
+                                    UserDetails user = userDetailsService.loadUserByUsername(email);
+                                    if (!user.isEnabled()) {
+                                        response.sendRedirect("/login?error=nao_confirmado&email=" + email);
+                                        return;
+                                    }
+                                } catch (UsernameNotFoundException ignored) {}
+                                response.sendRedirect("/login?error=credenciais_invalidas");
+                            } else {
+                                response.sendRedirect("/login?error=erro_desconhecido");
+                            }
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-                .userDetailsService(userDetailsService);
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .maximumSessions(1)
+                        .expiredUrl("/login?expired")
+                )
+                .rememberMe(remember -> remember
+                        .key("uniqueAndSecret")
+                        .tokenValiditySeconds(86400) // 1 dia
+                        .userDetailsService(userDetailsService)
+                )
+                .userDetailsService(userDetailsService)
+                .csrf(CsrfConfigurer::disable);
 
         return http.build();
     }
@@ -49,3 +83,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+

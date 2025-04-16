@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Confirmação de Email</title>
+    <link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+            <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+            <div class="text-center mt-3">
+                <a th:href="@{/login}" class="btn btn-primary">Ir para Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
