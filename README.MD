@@ -29,3 +29,8 @@ Sistema de gerenciamentos de cursos online com relacionamentos ManyToMany (Aluno
 | Persistência | Spring Data JPA, H2 Database   |
 | Frontend     | Thymeleaf, Bootstrap 5         |
 | Ferramentas  | Lombok, ModelMapper, Dev Tools |
+
+## Como testar?
+
+- Na classe config DataInitiliazer tem as credenciais de acesso de uma conta admin onde é possível testar todas as funções do site(criar cursos, editar alunos, etc);
+- No momento uma conta nova como usuário só tem acesso a função nova matricula.
